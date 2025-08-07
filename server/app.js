@@ -17,12 +17,15 @@ app.get('/', (req, res) => res.send('API running'));
 
 // Routes
 const authRoutes = require('./routes/auth');
-app.use('/api/auth', authRoutes); // ← This was missing
+app.use('/api/auth', authRoutes);
 
 const horseRoutes = require('./routes/horses');
 app.use('/api/horses', horseRoutes);
 
 const marketRoutes = require('./routes/market');
 app.use('/api/market', marketRoutes);
+
+const starterHorseRoutes = require('./routes/starterHorses');
+app.use('/api/starterHorses', starterHorseRoutes);
 
 module.exports = app;
