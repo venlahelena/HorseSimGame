@@ -1,7 +1,16 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../hooks/useAuth";
 import "./TopNavigation.css";
 
 const TopNavigation = () => {
+  const { token, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
     <nav className="top-nav">
       <div className="nav-container">
@@ -17,7 +26,7 @@ const TopNavigation = () => {
           Races
         </NavLink>
         <span className="separator" />
-        <NavLink to="/market" className="nav-link">
+        <NavLink to="/horsemarket" className="nav-link">
           Horse Market
         </NavLink>
         <span className="separator" />
@@ -25,13 +34,27 @@ const TopNavigation = () => {
           Marketplace
         </NavLink>
         <span className="separator" />
-        <NavLink to="/profile" className="nav-link">
-          User Profile
-        </NavLink>
-        <span className="separator" />
-        <NavLink to="/logout" className="nav-link">
-          Log out
-        </NavLink>
+        {token ? (
+          <>
+            <NavLink to="/profile" className="nav-link">
+              User Profile
+            </NavLink>
+            <span className="separator" />
+            <button className="nav-link logout-btn" onClick={handleLogout}>
+              Log out
+            </button>
+          </>
+        ) : (
+          <>
+            <NavLink to="/login" className="nav-link">
+              Login
+            </NavLink>
+            <span className="separator" />
+            <NavLink to="/register" className="nav-link">
+              Register
+            </NavLink>
+          </>
+        )}
       </div>
     </nav>
   );
