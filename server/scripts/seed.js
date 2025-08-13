@@ -1,73 +1,92 @@
-const mongoose = require('mongoose');
+const path = require('path');
 const dotenv = require('dotenv');
-const Horse = require('../models/Horse');
-const User = require('../models/User');
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-dotenv.config();
+const mongoose = require('mongoose');
+const User = require('../models/User');
+const StarterHorse = require('../models/StarterHorses');
+
+console.log('Loaded DB_URI:', process.env.DB_URI);
 
 const seed = async () => {
   try {
     await mongoose.connect(process.env.DB_URI);
-    console.log('✅ Connected to DB');
+    console.log('Connected to DB');
 
-    await Horse.deleteMany();
+    // Clear collections
     await User.deleteMany();
+    await mongoose.connection.collection('horses').deleteMany({});
+    await StarterHorse.deleteMany();  // clear starter horses collection
 
-    const user = await User.create({
+    // Create a test user (optional)
+    await User.create({
       username: 'testuser',
       email: 'test@example.com',
       password: 'notHashed123',
     });
 
-    // Horses owned by user
-    const userHorses = [
-      {
-        name: 'Storm',
-        breed: 'Arabian',
-        age: 5,
-        gender: 'mare',
-        stats: { speed: 85, stamina: 60, agility: 75 },
-        traits: { coatColor: 'gray', markings: 'blaze' },
-        owner: user._id,
-      },
+    // Seed starter horses
+    const starterHorses = [
       {
         name: 'Thunder',
-        breed: 'Mustang',
-        age: 6,
-        gender: 'stallion',
-        stats: { speed: 80, stamina: 70, agility: 80 },
-        traits: { coatColor: 'black', markings: 'star' },
-        owner: user._id,
-      },
-    ];
-
-    // Horses for sale (no owner yet)
-    const marketHorses = [
-      {
-        name: 'Daisy',
-        breed: 'Quarter Horse',
+        breed: 'Arabian',
         age: 4,
-        gender: 'mare',
-        stats: { speed: 70, stamina: 65, agility: 72 },
-        traits: { coatColor: 'chestnut', markings: 'snip' },
-        forSale: true,
-        price: 1500,
+        gender: 'stallion',
+        stats: { speed: 85, stamina: 70, agility: 75 },
+        traits: { coatColor: 'gray', markings: 'blaze' },
+        description: 'A fast and graceful Arabian stallion.',
       },
       {
-        name: 'Rocket',
-        breed: 'Thoroughbred',
+        name: 'Bella',
+        breed: 'Arabian',
         age: 3,
+        gender: 'mare',
+        stats: { speed: 80, stamina: 75, agility: 70 },
+        traits: { coatColor: 'bay', markings: 'star' },
+        description: 'A gentle Arabian mare with stamina.',
+      },
+      {
+        name: 'Shadow',
+        breed: 'Arabian',
+        age: 5,
         gender: 'gelding',
-        stats: { speed: 90, stamina: 55, agility: 78 },
-        traits: { coatColor: 'bay', markings: 'sock' },
-        forSale: true,
-        price: 2000,
+        stats: { speed: 78, stamina: 68, agility: 72 },
+        traits: { coatColor: 'black', markings: 'none' },
+        description: 'A reliable Arabian gelding.',
+      },
+      {
+        name: 'Storm',
+        breed: 'Mustang',
+        age: 4,
+        gender: 'stallion',
+        stats: { speed: 80, stamina: 75, agility: 70 },
+        traits: { coatColor: 'brown', markings: 'stripe' },
+        description: 'A strong Mustang stallion.',
+      },
+      {
+        name: 'Luna',
+        breed: 'Mustang',
+        age: 3,
+        gender: 'mare',
+        stats: { speed: 78, stamina: 72, agility: 68 },
+        traits: { coatColor: 'palomino', markings: 'spot' },
+        description: 'A swift Mustang mare.',
+      },
+      {
+        name: 'Dusty',
+        breed: 'Mustang',
+        age: 5,
+        gender: 'gelding',
+        stats: { speed: 75, stamina: 70, agility: 65 },
+        traits: { coatColor: 'gray', markings: 'snip' },
+        description: 'A dependable Mustang gelding.',
       },
     ];
 
-    await Horse.insertMany([...userHorses, ...marketHorses]);
+    await StarterHorse.insertMany(starterHorses);
+    console.log('Starter horses seeded!');
 
-    console.log('Database seeded!');
+    console.log('Database seeded! No horses created.');
     process.exit(0);
   } catch (err) {
     console.error('Seed failed:', err);
