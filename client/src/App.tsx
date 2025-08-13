@@ -5,6 +5,7 @@ import HorseDetail from "./pages/HorseDetail";
 import TopNavigation from "./components/layout/TopNaviagtion/TopNavigation";
 import MarketView from "./pages/MarketView/MarketView";
 import StarterHorseSelection from "./pages/StarterHorseSelection/StarterHorseSelection";
+import UserProfile from "./pages/UserProfile/UserProfile";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/horse/:id" element={<HorseDetail />} />
           <Route path="/market" element={<MarketView />} />
           <Route path="/starter-horse-selection" element={<StarterHorseSelection />} />
+          <Route path="/profile" element={<UserProfile />} />
         </Routes>
       </main>
     </div>

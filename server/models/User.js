@@ -1,35 +1,30 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-    minlength: 3,
-    maxlength: 32,
+  username: { type: String, required: true, unique: true },
+  email:    { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+  starterHorseChosen: { type: Boolean, default: false },
+
+  // New fields for profile
+  horses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Horse' }],
+  stable: {
+    name: { type: String, default: "" },
+    capacity: { type: Number, default: 10 },
+    banner: { type: String, default: "" },
+    avatar: { type: String, default: "" }
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true,
-    match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  valley: {
+    cleanliness: { type: Number, default: 0 },
+    infrastructureLevel: { type: Number, default: 0 },
+    economyHealth: { type: Number, default: 0 },
+    unlockedAreas: [{ type: String }]
   },
-  // Password is optional now, not doing auth yet
-  password: {
-    type: String,
-    required: false,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  starterHorseChosen: {
-    type: Boolean,
-    default: false,
-  },
+  preferences: {
+    theme: { type: String, default: "default" },
+    notifications: { type: Boolean, default: true }
+  }
 });
 
 module.exports = mongoose.model('User', userSchema);

@@ -39,6 +39,18 @@ export function useAuth() {
     localStorage.setItem("user", JSON.stringify(data.user));
   };
 
+  const fetchProfile = async () => {
+    if (!token) throw new Error("No token");
+    const res = await fetch(`${API_BASE}/user/profile`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error("Failed to fetch profile");
+    const profile = await res.json();
+    setUser(profile);
+    localStorage.setItem("user", JSON.stringify(profile));
+    return profile;
+  };
+
   const logout = () => {
     setToken(null);
     setUser(null);
@@ -46,5 +58,5 @@ export function useAuth() {
     localStorage.removeItem("user");
   };
 
-  return { token, user, login, register, logout };
+  return { token, user, login, register, logout, fetchProfile };
 }
