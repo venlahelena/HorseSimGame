@@ -29,7 +29,7 @@ const TopNavigation = () => {
           User Profile
         </NavLink>
         <span className="separator" />
-        <NavLink to="/profile" className="nav-link">
+        <NavLink to="/logout" className="nav-link">
           Log out
         </NavLink>
       </div>

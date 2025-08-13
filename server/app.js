@@ -28,4 +28,7 @@ app.use('/api/market', marketRoutes);
 const starterHorseRoutes = require('./routes/starterHorses');
 app.use('/api/starterHorses', starterHorseRoutes);
 
+const userRoutes = require('./routes/user');
+app.use('/api/user', userRoutes);
+
 module.exports = app;
