@@ -4,6 +4,7 @@ import StableView from "./pages/StableView/StableView";
 import HorseDetail from "./pages/HorseDetail";
 import TopNavigation from "./components/layout/TopNaviagtion/TopNavigation";
 import MarketView from "./pages/MarketView/MarketView";
+import StarterHorseSelection from "./pages/StarterHorseSelection/StarterHorseSelection";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<StableView />} />
           <Route path="/horse/:id" element={<HorseDetail />} />
           <Route path="/market" element={<MarketView />} />
+          <Route path="/starter-horse-selection" element={<StarterHorseSelection />} />
         </Routes>
       </main>
     </div>
