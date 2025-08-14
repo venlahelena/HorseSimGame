@@ -1,29 +1,55 @@
-import { useStarterHorses } from "../../hooks/useStarterHorses";
-import Card from "../../components/shared/Card/Card";
-import Button from "../../components/shared/Button/Button";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useGameStore } from "../../store/useGameStore";
+import { API_BASE } from "../../services/api";
 
 export default function StarterHorseSelection() {
-  const { horses, loading, error } = useStarterHorses();
+  const [selectedHorse, setSelectedHorse] = useState<string | null>(null);
+  const horses = useGameStore(state => state.horses);
+  const addHorse = useGameStore(state => state.addHorse);
+  const setUser = useGameStore(state => state.setUser);
+  const navigate = useNavigate();
 
-  const handleChoose = async (horseId: string) => {
-    await fetch("/api/starterHorses/choose", {
+  const handleSelect = async () => {
+    if (!selectedHorse) return;
+    // POST to backend to select starter horse
+    const res = await fetch(`${API_BASE}/starterHorses/select`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ horseId }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ horseId: selectedHorse }),
     });
-    // Redirect or update UI after selection
+    if (!res.ok) return alert("Failed to select starter horse");
+    const data = await res.json();
+    addHorse(data.horse);
+    setUser(data.user);
+    navigate("/stable");
   };
 
-  if (loading) return <p>Loading starter horses...</p>;
-  if (error) return <p>Error: {error}</p>;
-
   return (
-    <div className="starter-horse-grid">
-      {horses.map(horse => (
-        <Card key={horse._id} horse={horse}>
-          <Button onClick={() => handleChoose(horse._id)}>Choose</Button>
-        </Card>
-      ))}
+    <div>
+      <h2>Select Your Starter Horse</h2>
+      <ul>
+        {horses.map(horse => (
+          <li key={horse.id}>
+            <label>
+              <input
+                type="radio"
+                name="starterHorse"
+                value={horse.id}
+                checked={selectedHorse === horse.id}
+                onChange={() => setSelectedHorse(horse.id)}
+              />
+              {horse.name} ({horse.breed})
+            </label>
+          </li>
+        ))}
+      </ul>
+      <button onClick={handleSelect} disabled={!selectedHorse}>
+        Confirm Selection
+      </button>
     </div>
   );
 }

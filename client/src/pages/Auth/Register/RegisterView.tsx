@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useGameStore } from "../../../store/useGameStore";
+
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000/api";
 
 export default function RegisterView() {
+  const setUser = useGameStore(state => state.setUser);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,7 +15,7 @@ export default function RegisterView() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/auth/register", {
+      const res = await fetch(`${API_BASE}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
@@ -19,6 +23,7 @@ export default function RegisterView() {
       if (!res.ok) throw new Error(`Failed: ${res.status}`);
       const data = await res.json();
       localStorage.setItem("token", data.token);
+      setUser(data.user);
       localStorage.setItem("user", JSON.stringify(data.user));
       navigate("/starter-horse-selection");
     } catch (err: any) {

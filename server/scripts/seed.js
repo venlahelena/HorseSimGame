@@ -20,7 +20,7 @@ const seed = async () => {
     await StarterHorse.deleteMany(); // clear starter horses collection
 
     // Create a test user (optional)
-    const hashedPassword = await bcrypt.hash("notHashed123", 10);
+    const hashedPassword = await bcrypt.hash("password", 10);
     await User.create({
       username: "testuser",
       email: "test@example.com",

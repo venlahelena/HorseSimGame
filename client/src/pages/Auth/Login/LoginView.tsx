@@ -14,7 +14,7 @@ export default function LoginView() {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate("/profile"); // or wherever you want to redirect
+      navigate("/profile");
     } catch (err: any) {
       setError(err.message || "Login failed");
     }

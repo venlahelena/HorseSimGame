@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { API_BASE } from "../services/api";
-import type { Horse } from "../services/api";
+import { useGameStore } from "../store/useGameStore";
 
 export function useStarterHorses() {
-  const [horses, setHorses] = useState<Horse[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const horses = useGameStore(state => state.horses);
+  const setHorses = useGameStore(state => state.setHorses);
+  const setLoading = useGameStore(state => state.setLoading);
+  const setError = useGameStore(state => state.setError);
 
   useEffect(() => {
+    setLoading(true);
     fetch(`${API_BASE}/starterHorses`)
       .then(res => res.json())
       .then(data => {
@@ -16,7 +18,7 @@ export function useStarterHorses() {
       })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
-  }, []);
+  }, [setHorses, setLoading, setError]);
 
-  return { horses, loading, error };
+  return { horses };
 }

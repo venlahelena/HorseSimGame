@@ -1,30 +1,21 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../../hooks/useAuth";
-import Button from "../../components/shared/Button/Button";
+import { useGameStore } from "../../store/useGameStore";
 import "./UserProfile.css";
 
 export default function UserProfile() {
-  const { user, fetchProfile, logout } = useAuth();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchProfile().finally(() => setLoading(false));
-  }, []);
+  const user = useGameStore(state => state.user);
+  const loading = useGameStore(state => state.loading);
+  const error = useGameStore(state => state.error);
 
   if (loading) return <p>Loading profile...</p>;
-  if (!user) return <p>No user data found.</p>;
+  if (error) return <p className="error">{error}</p>;
+  if (!user) return <p>No user profile found.</p>;
 
   return (
-    <div className="user-profile-container">
-      <h2 className="profile-title">{user.username}</h2>
-      <div className="profile-info">
-        <div>Email: {user.email}</div>
-        <div>Stable: {user.stable?.name ?? "Unnamed Stable"}</div>
-        <div>Capacity: {user.stable?.capacity ?? 10}</div>
-        <div>Valley Progress: {user.valley?.infrastructureLevel ?? 0}</div>
-        {/* Add more profile fields as needed */}
-      </div>
-      <Button onClick={logout}>Logout</Button>
+    <div className="user-profile">
+      <h2>{user.username}'s Profile</h2>
+      <p>Email: {user.email}</p>
+      <p>Stable: {user.stable?.name}</p>
+      <p>Valley Level: {user.valley?.infrastructureLevel}</p>
     </div>
   );
 }

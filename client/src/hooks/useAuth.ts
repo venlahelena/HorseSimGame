@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useGameStore } from "../store/useGameStore";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000/api";
 
 export function useAuth() {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem("token"));
-  const [user, setUser] = useState<any | null>(() => {
-    const saved = localStorage.getItem("user");
-    return saved ? JSON.parse(saved) : null;
-  });
+  const user = useGameStore(state => state.user);
+  const setUser = useGameStore(state => state.setUser);
+  const reset = useGameStore(state => state.reset);
+
+  const token = localStorage.getItem("token");
 
   const login = async (email: string, password: string) => {
     const res = await fetch(`${API_BASE}/auth/login`, {
@@ -18,9 +18,8 @@ export function useAuth() {
 
     if (!res.ok) throw new Error("Login failed");
     const data = await res.json();
-    setToken(data.token);
-    setUser(data.user);
     localStorage.setItem("token", data.token);
+    setUser(data.user);
     localStorage.setItem("user", JSON.stringify(data.user));
   };
 
@@ -33,9 +32,8 @@ export function useAuth() {
 
     if (!res.ok) throw new Error("Registration failed");
     const data = await res.json();
-    setToken(data.token);
-    setUser(data.user);
     localStorage.setItem("token", data.token);
+    setUser(data.user);
     localStorage.setItem("user", JSON.stringify(data.user));
   };
 
@@ -52,10 +50,9 @@ export function useAuth() {
   };
 
   const logout = () => {
-    setToken(null);
-    setUser(null);
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    reset();
   };
 
   return { token, user, login, register, logout, fetchProfile };
