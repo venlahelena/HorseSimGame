@@ -22,7 +22,7 @@ function App() {
           <Route path="/login" element={<AuthView />} />
           <Route path="/register" element={<AuthView />} />
           <Route
-            path="/"
+            path="/stables"
             element={
               <PrivateRoute>
                 <StableView />

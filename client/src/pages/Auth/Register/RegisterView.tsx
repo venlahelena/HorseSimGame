@@ -1,34 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGameStore } from "../../../store/useGameStore";
-
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000/api";
+import { useRegister } from "../../../hooks/mutations/useRegister";
 
 export default function RegisterView() {
-  const setUser = useGameStore(state => state.setUser);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const registerMutation = useRegister();
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const res = await fetch(`${API_BASE}/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password }),
-      });
-      if (!res.ok) throw new Error(`Failed: ${res.status}`);
-      const data = await res.json();
-      localStorage.setItem("token", data.token);
-      setUser(data.user);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      navigate("/starter-horse-selection");
-    } catch (err: any) {
-      setError(err.message || "Registration failed.");
-    }
+    registerMutation.mutate(
+      { username, email, password },
+      {
+        onSuccess: () => navigate("/starter-horse-selection"),
+        onError: (err: any) => setError(err.message || "Registration failed."),
+      }
+    );
   };
 
   return (
@@ -57,7 +48,9 @@ export default function RegisterView() {
           onChange={e => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Register</button>
+        <button type="submit" disabled={registerMutation.isPending}>
+          {registerMutation.isPending ? "Registering..." : "Register"}
+        </button>
       </form>
     </div>
   );

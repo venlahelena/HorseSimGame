@@ -52,7 +52,20 @@ exports.chooseStarterHorse = async (req, res) => {
 
     await newHorse.save();
 
-    res.status(201).json({ message: 'Starter horse chosen!', horse: newHorse });
+    // Add the new horse to the user's horses array if needed
+    user.horses.push(newHorse._id);
+    await user.save();
+
+    // Fetch updated user with horses populated
+    const updatedUser = await User.findById(userId)
+      .populate("horses")
+      .select("-password");
+
+    res.status(201).json({
+      message: 'Starter horse chosen!',
+      horse: newHorse,
+      user: updatedUser
+    });
   } catch (err) {
     console.error('Error choosing starter horse:', err);
     res.status(500).json({ message: 'Server error' });

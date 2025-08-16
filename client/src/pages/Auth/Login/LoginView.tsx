@@ -4,26 +4,25 @@ import { useAuth } from "../../../hooks/useAuth";
 import Button from "../../../components/shared/Button/Button";
 
 export default function LoginView() {
-  const { login } = useAuth();
+  const { login, loginStatus, loginError } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await login(email, password);
-      navigate("/profile");
-    } catch (err: any) {
-      setError(err.message || "Login failed");
-    }
+    login(
+      { email, password },
+      {
+        onSuccess: () => navigate("/profile"),
+      }
+    );
   };
 
   return (
     <div className="auth-container">
       <h2>Login</h2>
-      {error && <div className="error">{error}</div>}
+      {loginError && <div className="error">{String(loginError)}</div>}
       <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -39,7 +38,9 @@ export default function LoginView() {
           onChange={e => setPassword(e.target.value)}
           required
         />
-        <Button type="submit">Login</Button>
+        <Button type="submit" disabled={loginStatus === "pending"}>
+          {loginStatus === "pending" ? "Logging in..." : "Login"}
+        </Button>
       </form>
     </div>
   );

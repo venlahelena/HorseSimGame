@@ -1,15 +1,17 @@
-import { useEffect } from "react";
-import { useGameStore } from "../store/useGameStore";
+import { useQuery } from "@tanstack/react-query";
 import { API_BASE } from "../services/api";
 
+async function fetchMarketHorses() {
+  const res = await fetch(`${API_BASE}/market/horses`);
+  if (!res.ok) throw new Error("Failed to fetch market horses");
+  return await res.json();
+}
+
 export function useMarketHorses() {
-  const horses = useGameStore(state => state.horses);
-  const setHorses = useGameStore(state => state.setHorses);
-  
-  useEffect(() => {
-    fetch(`${API_BASE}/market/horses`)
-      .then(res => res.json())
-      .then(data => setHorses(data));
-  }, [setHorses]);
-  return { horses };
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["marketHorses"],
+    queryFn: fetchMarketHorses,
+  });
+
+  return { horses: data ?? [], isLoading, error };
 }

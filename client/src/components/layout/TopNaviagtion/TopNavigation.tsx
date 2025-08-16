@@ -17,7 +17,7 @@ const TopNavigation = () => {
   return (
     <nav className="top-nav">
       <div className="nav-container">
-        <NavLink to="/" className="nav-link" end>
+        <NavLink to="/stables" className="nav-link" end>
           Stable
         </NavLink>
         <span className="separator" />
