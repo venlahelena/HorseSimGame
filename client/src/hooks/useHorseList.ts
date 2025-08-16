@@ -1,27 +1,24 @@
-// src/hooks/useHorseList.ts
-import { useEffect, useState } from "react";
-import type { Horse, FetchHorsesResponse } from "../services/api";
-import { fetchHorses } from "../services/api";
+import { useQuery } from "@tanstack/react-query";
+import { API_BASE } from "../services/api";
+import { Horse } from "../models/Horse";
 
-export function useHorseList(params: Record<string, any> = {}) {
-  const [horses, setHorses] = useState<Horse[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(params.page ?? 1);
-  const [limit, setLimit] = useState(params.limit ?? 10);
+async function fetchHorses(): Promise<Horse[]> {
+  const res = await fetch(`${API_BASE}/horses`);
+  if (!res.ok) throw new Error("Failed to fetch horses");
+  const result = await res.json();
+  // If paginated, horses are in result.data
+  const horses = Array.isArray(result) ? result : result.data;
+  if (!Array.isArray(horses)) return [];
+  return horses.map((horse: any) => ({
+    ...horse,
+    id: horse._id,
+  }));
+}
 
-  useEffect(() => {
-    setLoading(true);
-    fetchHorses({ page, limit, ...params })
-      .then((data: FetchHorsesResponse) => {
-        setHorses(data.data);
-        setTotal(data.total);
-        setError(null);
-      })
-      .catch((err: Error) => setError(err.message))
-      .finally(() => setLoading(false));
-  }, [page, limit, JSON.stringify(params)]);
-
-  return { horses, loading, error, total, page, limit, setPage, setLimit };
+export function useHorseList() {
+  return useQuery<Horse[], Error>({
+    queryKey: ["horses"],
+    queryFn: fetchHorses,
+    select: data => data ?? [],
+  });
 }

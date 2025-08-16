@@ -1,20 +1,23 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../../../hooks/useAuth";
+import { useGameStore } from "../../../store/useGameStore";
 import "./TopNavigation.css";
 
 const TopNavigation = () => {
-  const { token, logout } = useAuth();
+  const user = useGameStore(state => state.user);
+  const reset = useGameStore(state => state.reset);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    reset();
     navigate("/login");
   };
 
   return (
     <nav className="top-nav">
       <div className="nav-container">
-        <NavLink to="/" className="nav-link" end>
+        <NavLink to="/stables" className="nav-link" end>
           Stable
         </NavLink>
         <span className="separator" />
@@ -34,7 +37,7 @@ const TopNavigation = () => {
           Marketplace
         </NavLink>
         <span className="separator" />
-        {token ? (
+        {user ? (
           <>
             <NavLink to="/profile" className="nav-link">
               User Profile

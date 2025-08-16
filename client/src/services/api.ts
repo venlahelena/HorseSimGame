@@ -1,26 +1,8 @@
-// src/services/api.ts
+import { useGameStore } from "../store/useGameStore";
+import { Horse } from "../models/Horse";
 
 const API_BASE =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
-
-// Define the Horse type consistent with backend and frontend
-export interface Horse {
-  _id: string;
-  name: string;
-  breed: string;
-  age: number;
-  gender?: string;
-  stats?: {
-    speed?: number;
-    stamina?: number;
-    agility?: number;
-  };
-  traits?: {
-    coatColor?: string;
-    markings?: string;
-  };
-  price?: number;
-}
 
 export interface FetchHorsesResponse {
   page: number;
@@ -29,7 +11,6 @@ export interface FetchHorsesResponse {
   data: Horse[];
 }
 
-// params: a key-value object of query params, e.g., { page: 1, limit: 10 }
 export async function fetchHorses(
   params: Record<string, any> = {}
 ): Promise<FetchHorsesResponse> {
@@ -51,7 +32,13 @@ export async function fetchHorses(
     );
   }
 
-  return res.json();
+  const response: FetchHorsesResponse = await res.json();
+
+  // Sync Zustand store with fetched horses
+  const setHorses = useGameStore.getState().setHorses;
+  setHorses(response.data);
+
+  return response;
 }
 
 export { API_BASE };

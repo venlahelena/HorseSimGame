@@ -2,25 +2,23 @@ import { Link } from "react-router-dom";
 import { useHorseList } from "../../hooks/useHorseList";
 import PageLayout from "../../components/layout/PageLayout/PageLayout";
 import "./StableView.css";
+import { Horse } from "../../models/Horse";
 
 const MAX_STABLE_SIZE = 10;
 
 export default function StableView() {
-  const { horses, loading, error } = useHorseList({ page: 1, limit: 20 });
+  const { data: horses = [], isLoading, error } = useHorseList();
 
   const filledStalls = horses.length;
   const emptyStalls = MAX_STABLE_SIZE - filledStalls;
 
-  if (loading) return <p>Loading your stable...</p>;
-  if (error) return <p>Error loading stable: {error}</p>;
-
-  // 👇 create the upper and lower views
-
+  if (isLoading) return <p>Loading horses...</p>;
+  if (error) return <p>Error loading horses: {error.message}</p>;
 
   const upperView = (
     <div className="stable-corridor">
-      {horses.map((horse) => (
-        <Link to={`/horse/${horse._id}`} key={horse._id} className="stable-stall">
+      {horses.map((horse: Horse) => (
+        <Link to={`/horse/${horse.id}`} key={horse.id} className="stable-stall">
           <div className="stall-sign">{horse.name} – Age {horse.age}</div>
         </Link>
       ))}
@@ -32,7 +30,7 @@ export default function StableView() {
     </div>
   );
 
-    const lowerView = "";
+  const lowerView = "";
 
   return <PageLayout upper={upperView} lower={lowerView} />;
 }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRegister } from "../../../hooks/mutations/useRegister";
 
 export default function RegisterView() {
   const [username, setUsername] = useState("");
@@ -8,22 +9,17 @@ export default function RegisterView() {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const registerMutation = useRegister();
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password }),
-      });
-      if (!res.ok) throw new Error(`Failed: ${res.status}`);
-      const data = await res.json();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      navigate("/starter-horse-selection");
-    } catch (err: any) {
-      setError(err.message || "Registration failed.");
-    }
+    registerMutation.mutate(
+      { username, email, password },
+      {
+        onSuccess: () => navigate("/starter-horse-selection"),
+        onError: (err: any) => setError(err.message || "Registration failed."),
+      }
+    );
   };
 
   return (
@@ -52,7 +48,9 @@ export default function RegisterView() {
           onChange={e => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Register</button>
+        <button type="submit" disabled={registerMutation.isPending}>
+          {registerMutation.isPending ? "Registering..." : "Register"}
+        </button>
       </form>
     </div>
   );

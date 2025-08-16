@@ -1,18 +1,20 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useHorse } from "../hooks/useHorses";
+import { useHorse } from "../hooks/useHorse";
 
 export default function HorseDetail() {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams();
+  const { data: horse, isLoading, error } = useHorse(id);
   const navigate = useNavigate();
-  const { horse, loading, error } = useHorse(id);
 
-  if (loading) return <p>Loading horse info...</p>;
-  if (error) return <p>Error: {error}</p>;
-  if (!horse) return <p>Horse not found.</p>;
+  if (!id) return <div>No horse selected.</div>; 
+
+  if (isLoading) return <div>Loading horse...</div>;
+  if (error) return <div>Error: {String(error)}</div>;
+  if (!horse) return <div>Horse not found.</div>;
 
   return (
     <div className="horse-detail">
-      <button onClick={() => navigate("/")} style={{ marginBottom: "1rem" }}>
+      <button onClick={() => navigate("/stables")} style={{ marginBottom: "1rem" }}>
         ← Back to Stable
       </button>
       <h2>{horse.name}</h2>

@@ -1,30 +1,47 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../../hooks/useAuth";
-import Button from "../../components/shared/Button/Button";
-import "./UserProfile.css";
+import { useState } from "react";
+import { useUserProfile } from "../../hooks/useUserProfile";
+import { useUpdateUser } from "../../hooks/mutations/useUpdateUser";
 
 export default function UserProfile() {
-  const { user, fetchProfile, logout } = useAuth();
-  const [loading, setLoading] = useState(true);
+  const { data: user, isLoading, error } = useUserProfile();
+  const [username, setUsername] = useState(user?.username ?? "");
+  const [email, setEmail] = useState(user?.email ?? "");
+  const updateUser = useUpdateUser();
 
-  useEffect(() => {
-    fetchProfile().finally(() => setLoading(false));
-  }, []);
+  if (isLoading) return <p>Loading profile...</p>;
+  if (error) return <p className="error">{String(error)}</p>;
+  if (!user) return <p>No user profile found.</p>;
 
-  if (loading) return <p>Loading profile...</p>;
-  if (!user) return <p>No user data found.</p>;
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    updateUser.mutate({ userId: user.id, updates: { username, email } });
+  };
 
   return (
-    <div className="user-profile-container">
-      <h2 className="profile-title">{user.username}</h2>
-      <div className="profile-info">
-        <div>Email: {user.email}</div>
-        <div>Stable: {user.stable?.name ?? "Unnamed Stable"}</div>
-        <div>Capacity: {user.stable?.capacity ?? 10}</div>
-        <div>Valley Progress: {user.valley?.infrastructureLevel ?? 0}</div>
-        {/* Add more profile fields as needed */}
+    <div className="user-profile">
+      <h2>Edit Profile</h2>
+      <div>
+        <strong>Current Username:</strong> {user.username}
       </div>
-      <Button onClick={logout}>Logout</Button>
+      <div>
+        <strong>Current Email:</strong> {user.email}
+      </div>
+      <form onSubmit={handleSubmit}>
+        <label>
+          New Username:
+          <input value={username} onChange={e => setUsername(e.target.value)} />
+        </label>
+        <label>
+          New Email:
+          <input value={email} onChange={e => setEmail(e.target.value)} />
+        </label>
+        <button type="submit" disabled={updateUser.isPending}>
+          {updateUser.isPending ? "Saving..." : "Save Changes"}
+        </button>
+        {updateUser.error && <p className="error">{String(updateUser.error)}</p>}
+      </form>
+      <p>Stable: {user.stable?.name}</p>
+      <p>Valley Level: {user.valley?.infrastructureLevel}</p>
     </div>
   );
 }
