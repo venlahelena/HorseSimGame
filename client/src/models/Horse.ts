@@ -1,5 +1,5 @@
 export interface Horse {
-  id: string; // use 'id' everywhere for consistency
+  id: string;
   name: string;
   breed: string;
   age: number;
@@ -16,4 +16,11 @@ export interface Horse {
   forSale: boolean;
   price?: number;
   owner?: string;
+  health: number;
+  mood: string;
+  training: {
+    speed: number;
+    stamina: number;
+    agility: number;
+  };
 }

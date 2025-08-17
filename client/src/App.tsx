@@ -1,7 +1,7 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import StableView from "./pages/StableView/StableView";
-import HorseDetail from "./pages/HorseDetail";
+import HorseDetail from "./pages/HorseDetails/HorseDetail";
 import TopNavigation from "./components/layout/TopNaviagtion/TopNavigation";
 import MarketView from "./pages/MarketView/MarketView";
 import StarterHorseSelection from "./pages/StarterHorseSelection/StarterHorseSelection";
