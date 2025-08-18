@@ -12,7 +12,9 @@ exports.register = async (req, res) => {
     if (existingUser) {
       return res.status(409).json({ message: 'Email already in use' });
     }
-    const newUser = new User({ username, email, password });
+    // Hash the password before saving
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
     const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
     res.status(201).json({

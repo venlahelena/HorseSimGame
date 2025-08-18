@@ -11,16 +11,16 @@ export default function RegisterView() {
 
   const registerMutation = useRegister();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    registerMutation.mutate(
-      { username, email, password },
-      {
-        onSuccess: () => navigate("/starter-horse-selection"),
-        onError: (err: any) => setError(err.message || "Registration failed."),
-      }
-    );
-  };
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
+  registerMutation.mutate(
+    { username, email, password },
+    {
+      onSuccess: () => navigate("/stables"),
+      onError: (err: any) => setError(err.message || "Registration failed."),
+    }
+  );
+};
 
   return (
     <div className="auth-container">
