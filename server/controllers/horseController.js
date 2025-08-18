@@ -1,17 +1,28 @@
 const Horse = require("../models/Horse");
 const HorseEvent = require("../models/HorseEvents");
+const mongoose = require("mongoose");
 
 // Helper to log horse events
 async function logHorseEvent(horseId, type, detail) {
   await HorseEvent.create({ horse: horseId, type, detail });
 }
 
-// List all horses
+
+// List all horses owned by a user
 exports.listHorses = async (req, res) => {
+  const userId = req.query.userId;
+  if (!userId) return res.status(400).json({ message: "Missing userId" });
+
   try {
-    const horses = await Horse.find();
+    const horses = await Horse.find({
+      owner: userId,
+      forSale: false,
+    });
+
+    console.log(`Listing horses for user: ${userId}. Found: ${horses.length}`);
     res.json(horses);
   } catch (err) {
+    console.error("Error listing horses:", err);
     res.status(500).json({ message: err.message });
   }
 };

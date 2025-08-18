@@ -27,16 +27,18 @@ export default function StarterHorseSelection() {
   if (error) return <p>Error loading starter horses: {String(error)}</p>;
   if (!horses || horses.length === 0) return <p>No starter horses available.</p>;
 
+  console.log("Selecting starter horse for user:", userId);
+
   return (
     <div className="starter-horse-selection">
       <h2>Select Your Starter Horse</h2>
       <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
         {horses.map((horse: Horse) => {
-          if (!horse.id) return null;
-          const isSelected = selectedHorse === horse.id;
+          if (!horse._id) return null;
+          const isSelected = selectedHorse === horse._id;
           return (
             <div
-              key={horse.id}
+              key={horse._id}
               style={{
                 border: isSelected ? "2px solid #007bff" : "1px solid #ccc",
                 borderRadius: "1rem",
@@ -45,7 +47,7 @@ export default function StarterHorseSelection() {
                 minWidth: "220px",
                 boxShadow: "0 0.5rem 1rem rgba(0,0,0,0.07)",
               }}
-              onClick={() => setSelectedHorse(horse.id)}
+              onClick={() => setSelectedHorse(horse._id)}
             >
               <h3>{horse.name}</h3>
               <p>
@@ -66,7 +68,7 @@ export default function StarterHorseSelection() {
                   cursor: isSelected && !mutation.isPending ? "pointer" : "not-allowed",
                 }}
                 disabled={!isSelected || mutation.isPending}
-                onClick={() => mutation.mutate({ userId, starterHorseId: horse.id })}
+                onClick={() => mutation.mutate({ userId, starterHorseId: horse._id })}
               >
                 {mutation.isPending && isSelected ? "Selecting..." : "Select"}
               </button>

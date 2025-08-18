@@ -15,7 +15,7 @@ const MarketView = () => {
   return (
     <div className="market-grid">
       {horses.map((horse) => (
-        <div key={horse.id} className="horse-card">
+        <div key={horse._id} className="horse-card">
           <div className="horse-name">{horse.name}</div>
           <div className="horse-meta">
             {horse.breed} · {horse.age} y/o · {horse.gender}
