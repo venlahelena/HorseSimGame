@@ -1,11 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { API_BASE } from "../services/api";
-
-async function fetchMarketHorses() {
-  const res = await fetch(`${API_BASE}/market/horses`);
-  if (!res.ok) throw new Error("Failed to fetch market horses");
-  return await res.json();
-}
+import { fetchMarketHorses } from "../services/horseMarketApi";
 
 export function useMarketHorses() {
   const { data, isLoading, error } = useQuery({

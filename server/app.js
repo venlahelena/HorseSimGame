@@ -31,4 +31,7 @@ app.use('/api/starterHorses', starterHorseRoutes);
 const userRoutes = require('./routes/user');
 app.use('/api/user', userRoutes);
 
+const valleyRoutes = require('./routes/valley');
+app.use('/api/valley', valleyRoutes);
+
 module.exports = app;

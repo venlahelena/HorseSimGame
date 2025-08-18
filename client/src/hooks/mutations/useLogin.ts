@@ -1,21 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { API_BASE } from "../../services/api";
+import { LoginData, loginRequest } from "../../services/authApi";
 import { useGameStore } from "../../store/useGameStore";
-
-type LoginData = {
-  email: string;
-  password: string;
-};
-
-async function loginRequest(email: string, password: string) {
-  const res = await fetch(`${API_BASE}/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  });
-  if (!res.ok) throw new Error("Login failed");
-  return await res.json();
-}
 
 export function useLogin() {
   const setUser = useGameStore(state => state.setUser);

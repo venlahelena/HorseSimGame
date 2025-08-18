@@ -7,25 +7,44 @@ async function logHorseEvent(horseId, type, detail) {
   await HorseEvent.create({ horse: horseId, type, detail });
 }
 
-
 // List all horses owned by a user
 exports.listHorses = async (req, res) => {
-  const userId = req.query.userId;
-  if (!userId) return res.status(400).json({ message: "Missing userId" });
-
   try {
-    const horses = await Horse.find({
-      owner: userId,
-      forSale: false,
-    });
+    const { limit = 10, page = 1, breed, gender, minAge, maxAge, sort, userId } = req.query;
 
-    console.log(`Listing horses for user: ${userId}. Found: ${horses.length}`);
-    res.json(horses);
+    // Validate pagination params
+    if (Number(limit) <= 0 || Number(page) <= 0) {
+      return res.status(400).json({ message: "Invalid pagination parameters" });
+    }
+
+    const query = {};
+    if (userId) query.owner = userId;
+    if (breed) query.breed = breed;
+    if (gender) query.gender = gender;
+    if (minAge || maxAge) {
+      query.age = {};
+      if (minAge) query.age.$gte = Number(minAge);
+      if (maxAge) query.age.$lte = Number(maxAge);
+    }
+    query.forSale = false;
+
+    let horsesQuery = Horse.find(query);
+    if (sort) horsesQuery = horsesQuery.sort(sort);
+
+    const skip = (Number(page) - 1) * Number(limit);
+    horsesQuery = horsesQuery.skip(skip).limit(Number(limit));
+
+    const horses = await horsesQuery.exec();
+    res.status(200).json({
+      data: horses,
+      page: Number(page),
+      limit: Number(limit)
+    });
   } catch (err) {
-    console.error("Error listing horses:", err);
     res.status(500).json({ message: err.message });
   }
 };
+
 
 // Get horse by ID
 exports.getHorseById = async (req, res) => {
@@ -67,7 +86,7 @@ exports.deleteHorse = async (req, res) => {
   try {
     const horse = await Horse.findByIdAndDelete(req.params.id);
     if (!horse) return res.status(404).json({ message: "Horse not found" });
-    res.json({ message: "Horse deleted" });
+    res.sendStatus(204);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

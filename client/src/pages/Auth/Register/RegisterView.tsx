@@ -16,7 +16,7 @@ const handleSubmit = (e: React.FormEvent) => {
   registerMutation.mutate(
     { username, email, password },
     {
-      onSuccess: () => navigate("/stables"),
+      onSuccess: () => navigate("/profile"),
       onError: (err: any) => setError(err.message || "Registration failed."),
     }
   );

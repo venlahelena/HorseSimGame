@@ -13,8 +13,14 @@ export default function StableView() {
   const filledStalls = horses.length;
   const emptyStalls = MAX_STABLE_SIZE - filledStalls;
 
-  if (isLoading) return <p>Loading horses...</p>;
-  if (error) return <p>Error loading horses: {error.message}</p>;
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading horses.</div>;
+  if (horses.length === 0)
+    return (
+      <div>
+        Your stable is empty. Complete onboarding to get your first horse!
+      </div>
+    );
 
   const upperView = (
     <div className="stable-corridor">
