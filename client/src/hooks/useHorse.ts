@@ -1,15 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { API_BASE } from "../services/api";
+import { fetchHorse } from "../services/horseApi";
 
 export function useHorse(id?: string) {
   return useQuery({
     queryKey: ["horse", id],
-    queryFn: async () => {
-      if (!id) return null; // Prevent fetch if id is missing
-      const res = await fetch(`${API_BASE}/horses/${id}`);
-      if (!res.ok) throw new Error("Horse not found");
-      return await res.json();
-    },
+    queryFn: () => id ? fetchHorse(id) : null,
     enabled: !!id,
   });
 }

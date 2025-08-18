@@ -7,7 +7,6 @@ const userSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   starterHorseChosen: { type: Boolean, default: false },
 
-  // New fields for profile
   horses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Horse' }],
   stable: {
     name: { type: String, default: "" },

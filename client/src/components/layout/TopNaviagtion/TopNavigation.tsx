@@ -3,8 +3,8 @@ import { useGameStore } from "../../../store/useGameStore";
 import "./TopNavigation.css";
 
 const TopNavigation = () => {
-  const user = useGameStore(state => state.user);
-  const reset = useGameStore(state => state.reset);
+  const user = useGameStore((state) => state.user);
+  const reset = useGameStore((state) => state.reset);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -23,6 +23,10 @@ const TopNavigation = () => {
         <span className="separator" />
         <NavLink to="/training" className="nav-link">
           Training
+        </NavLink>
+        <span className="separator" />
+        <NavLink to="/valley" className="nav-link">
+          Valley
         </NavLink>
         <span className="separator" />
         <NavLink to="/races" className="nav-link">

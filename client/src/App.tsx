@@ -8,9 +8,14 @@ import StarterHorseSelection from "./pages/StarterHorseSelection/StarterHorseSel
 import UserProfile from "./pages/UserProfile/UserProfile";
 import AuthView from "./pages/Auth/AuthView/AuthView";
 import PrivateRoute from "./components/auth/PrivateRoute";
+import ValleyView from "./pages/Valley/ValleyView";
 
 function Placeholder({ name }: { name: string }) {
-  return <div style={{ padding: "2rem", textAlign: "center" }}>{name} page coming soon!</div>;
+  return (
+    <div style={{ padding: "2rem", textAlign: "center" }}>
+      {name} page coming soon!
+    </div>
+  );
 }
 
 function App() {
@@ -61,9 +66,23 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/valley"
+            element={
+              <PrivateRoute>
+                <ValleyView />
+              </PrivateRoute>
+            }
+          />
           {/* Placeholder routes */}
-          <Route path="/horsemarket" element={<Placeholder name="Horse Market" />} />
-          <Route path="/marketplace" element={<Placeholder name="Marketplace" />} />
+          <Route
+            path="/horsemarket"
+            element={<Placeholder name="Horse Market" />}
+          />
+          <Route
+            path="/marketplace"
+            element={<Placeholder name="Marketplace" />}
+          />
           <Route path="/training" element={<Placeholder name="Training" />} />
           <Route path="/races" element={<Placeholder name="Races" />} />
           <Route path="/logout" element={<Placeholder name="Logout" />} />

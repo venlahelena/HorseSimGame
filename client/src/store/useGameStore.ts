@@ -70,11 +70,11 @@ export const useGameStore = create<GameState>((set, get) => ({
   setError: (error) => set({ error }),
   addHorse: (horse) => set({ horses: [...get().horses, horse] }),
   removeHorse: (id) =>
-    set({ horses: get().horses.filter((horse) => horse.id !== id) }),
+    set({ horses: get().horses.filter((horse) => horse._id !== id) }),
   updateHorse: (horse) =>
     set({
       horses: get().horses.map((horseItem) =>
-        horseItem.id === horse.id ? horse : horseItem
+        horseItem._id === horse._id ? horse : horseItem
       ),
     }),
   reset: () =>
