@@ -1,4 +1,5 @@
 import "./App.css";
+import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import StableView from "./pages/StableView/StableView";
 import HorseDetail from "./pages/HorseDetails/HorseDetail";
@@ -9,6 +10,7 @@ import UserProfile from "./pages/UserProfile/UserProfile";
 import AuthView from "./pages/Auth/AuthView/AuthView";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import ValleyView from "./pages/Valley/ValleyView";
+import QuestDropdown from "./components/layout/QuestDropdown/QuestDropdown";
 
 function Placeholder({ name }: { name: string }) {
   return (
@@ -19,75 +21,94 @@ function Placeholder({ name }: { name: string }) {
 }
 
 function App() {
+  const [showQuests, setShowQuests] = useState(false);
   return (
     <div>
-      <TopNavigation />
-      <main className="page-container">
-        <Routes>
-          <Route path="/login" element={<AuthView />} />
-          <Route path="/register" element={<AuthView />} />
-          <Route
-            path="/stables"
-            element={
-              <PrivateRoute>
-                <StableView />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/horse/:id"
-            element={
-              <PrivateRoute>
-                <HorseDetail />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/market"
-            element={
-              <PrivateRoute>
-                <MarketView />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/starter-horse-selection"
-            element={
-              <PrivateRoute>
-                <StarterHorseSelection />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <PrivateRoute>
-                <UserProfile />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/valley"
-            element={
-              <PrivateRoute>
-                <ValleyView />
-              </PrivateRoute>
-            }
-          />
-          {/* Placeholder routes */}
-          <Route
-            path="/horsemarket"
-            element={<Placeholder name="Horse Market" />}
-          />
-          <Route
-            path="/marketplace"
-            element={<Placeholder name="Marketplace" />}
-          />
-          <Route path="/training" element={<Placeholder name="Training" />} />
-          <Route path="/races" element={<Placeholder name="Races" />} />
-          <Route path="/logout" element={<Placeholder name="Logout" />} />
-        </Routes>
-      </main>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <TopNavigation />
+        <div
+          style={{
+            position: "relative",
+            marginLeft: "1rem",
+            height: "3rem",
+            display: "inline-block",
+          }}
+        >
+          <button className="nav-link" onClick={() => setShowQuests((s) => !s)}>
+            Quests
+          </button>
+          {showQuests && <QuestDropdown />}
+        </div>
+      </div>
+      <div>
+        <TopNavigation />
+        <main className="page-container">
+          <Routes>
+            <Route path="/login" element={<AuthView />} />
+            <Route path="/register" element={<AuthView />} />
+            <Route
+              path="/stables"
+              element={
+                <PrivateRoute>
+                  <StableView />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/horse/:id"
+              element={
+                <PrivateRoute>
+                  <HorseDetail />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/market"
+              element={
+                <PrivateRoute>
+                  <MarketView />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/starter-horse-selection"
+              element={
+                <PrivateRoute>
+                  <StarterHorseSelection />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <UserProfile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/valley"
+              element={
+                <PrivateRoute>
+                  <ValleyView />
+                </PrivateRoute>
+              }
+            />
+            {/* Placeholder routes */}
+            <Route
+              path="/horsemarket"
+              element={<Placeholder name="Horse Market" />}
+            />
+            <Route
+              path="/marketplace"
+              element={<Placeholder name="Marketplace" />}
+            />
+            <Route path="/training" element={<Placeholder name="Training" />} />
+            <Route path="/races" element={<Placeholder name="Races" />} />
+            <Route path="/logout" element={<Placeholder name="Logout" />} />
+          </Routes>
+        </main>
+      </div>
     </div>
   );
 }
