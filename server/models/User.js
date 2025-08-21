@@ -23,7 +23,8 @@ const userSchema = new mongoose.Schema({
   preferences: {
     theme: { type: String, default: "default" },
     notifications: { type: Boolean, default: true }
-  }
+  },
+  currency: { type: Number, default: 1000 }
 });
 
 module.exports = mongoose.model('User', userSchema);

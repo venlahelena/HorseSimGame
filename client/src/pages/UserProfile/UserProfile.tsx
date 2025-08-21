@@ -26,19 +26,27 @@ export default function UserProfile() {
       <div>
         <strong>Current Email:</strong> {user.email}
       </div>
+      <div>
+        <strong>Currency:</strong> {user.currency}
+      </div>
       <form onSubmit={handleSubmit}>
         <label>
           New Username:
-          <input value={username} onChange={e => setUsername(e.target.value)} />
+          <input
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
         </label>
         <label>
           New Email:
-          <input value={email} onChange={e => setEmail(e.target.value)} />
+          <input value={email} onChange={(e) => setEmail(e.target.value)} />
         </label>
         <button type="submit" disabled={updateUser.isPending}>
           {updateUser.isPending ? "Saving..." : "Save Changes"}
         </button>
-        {updateUser.error && <p className="error">{String(updateUser.error)}</p>}
+        {updateUser.error && (
+          <p className="error">{String(updateUser.error)}</p>
+        )}
       </form>
       <p>Stable: {user.stable?.name}</p>
       <p>Valley Level: {user.valley?.infrastructureLevel}</p>
