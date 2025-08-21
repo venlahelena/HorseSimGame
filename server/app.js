@@ -34,4 +34,7 @@ app.use('/api/user', userRoutes);
 const valleyRoutes = require('./routes/valley');
 app.use('/api/valley', valleyRoutes);
 
+const questRoutes = require('./routes/quest');
+app.use('/api/quests', questRoutes);
+
 module.exports = app;

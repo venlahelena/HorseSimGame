@@ -3,7 +3,7 @@ body {
   background-color: #A3B18A; /* sage green */
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  padding-top: 70px; /* enough top padding so nav doesn't overlap content */
+  padding-top: 10rem; /* enough top padding so nav doesn't overlap content */
 }
 
 /* Nav wrapper fixed at top and full width */
