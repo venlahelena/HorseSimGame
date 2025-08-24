@@ -5,7 +5,7 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const mongoose = require("mongoose");
 const User = require("../models/User");
-const StarterHorse = require("../models/StarterHorses");
+const StarterHorse = require("../models/StarterHorse");
 
 console.log("Loaded DB_URI:", process.env.DB_URI);
 

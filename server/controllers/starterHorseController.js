@@ -1,4 +1,4 @@
-const StarterHorse = require("../models/StarterHorses");
+const StarterHorse = require("../models/StarterHorse");
 const Horse = require("../models/Horse");
 const User = require("../models/User");
 

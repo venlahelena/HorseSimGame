@@ -28,13 +28,13 @@ app.use('/api/market', marketRoutes);
 const starterHorseRoutes = require('./routes/starterHorses');
 app.use('/api/starterHorses', starterHorseRoutes);
 
-const userRoutes = require('./routes/user');
-app.use('/api/user', userRoutes);
+const userRoutes = require('./routes/users');
+app.use('/api/users', userRoutes);
 
 const valleyRoutes = require('./routes/valley');
 app.use('/api/valley', valleyRoutes);
 
-const questRoutes = require('./routes/quest');
+const questRoutes = require('./routes/quests');
 app.use('/api/quests', questRoutes);
 
 module.exports = app;

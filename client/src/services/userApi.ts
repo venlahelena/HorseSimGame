@@ -7,7 +7,7 @@ export type UpdateUserArgs = {
 
 export async function fetchUserProfile() {
   const token = localStorage.getItem("token");
-  const res = await fetch(`${API_BASE}/user/profile`, {
+  const res = await fetch(`${API_BASE}/users/profile`, {
     headers: {
       "Authorization": `Bearer ${token}`,
       "Content-Type": "application/json"

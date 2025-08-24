@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import StableView from "./pages/StableView/StableView";
 import HorseDetail from "./pages/HorseDetails/HorseDetail";
-import TopNavigation from "./components/layout/TopNaviagtion/TopNavigation";
+import TopNavigation from "./components/layout/TopNavigation/TopNavigation";
 import MarketView from "./pages/MarketView/MarketView";
 import StarterHorseSelection from "./pages/StarterHorseSelection/StarterHorseSelection";
 import UserProfile from "./pages/UserProfile/UserProfile";
