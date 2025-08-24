@@ -19,6 +19,8 @@ const userSchema = new mongoose.Schema({
     infrastructureLevel: { type: Number, default: 0 },
     economyHealth: { type: Number, default: 0 },
     unlockedAreas: [{ type: String }],
+    barnRepaired: { type: Boolean, default: false },
+    trainingRingBuilt: { type: Boolean, default: false },
   },
   preferences: {
     theme: { type: String, default: "default" },

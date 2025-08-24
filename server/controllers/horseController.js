@@ -1,5 +1,5 @@
 const Horse = require("../models/Horse");
-const HorseEvent = require("../models/HorseEvents");
+const HorseEvent = require("../models/HorseEvent");
 const mongoose = require("mongoose");
 
 // Helper to log horse events

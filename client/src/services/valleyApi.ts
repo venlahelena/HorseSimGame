@@ -24,3 +24,31 @@ export async function updateValleyState(updates: object) {
   if (!res.ok) throw new Error("Failed to update valley state");
   return await res.json();
 }
+
+export async function repairBarn() {
+  const token = localStorage.getItem("token");
+  const res = await fetch("/api/valley/repair-barn", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    credentials: "include",
+  });
+  if (!res.ok) throw new Error("Failed to repair barn");
+  return await res.json();
+}
+
+export async function buildTrainingRing() {
+  const token = localStorage.getItem("token");
+  const res = await fetch("/api/valley/build-training-ring", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    credentials: "include",
+  });
+  if (!res.ok) throw new Error("Failed to build training ring");
+  return await res.json();
+}
